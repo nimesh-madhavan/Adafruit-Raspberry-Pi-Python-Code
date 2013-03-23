@@ -54,7 +54,7 @@ class Adafruit_CharLCD:
 
 
 
-    def __init__(self, pin_rs=25, pin_e=24, pins_db=[23, 17, 27, 22], GPIO = None):
+    def __init__(self, pin_rs=25, pin_e=24, pins_db=[23, 17, 21, 22], GPIO = None):
 	# Emulate the old behavior of using RPi.GPIO if we haven't been given
 	# an explicit GPIO interface to use
 	if not GPIO:
@@ -245,19 +245,17 @@ class Adafruit_CharLCD:
     def message(self, text):
         """ Send string to LCD. Newline wraps to second line"""
 
-	for char in text:
-            if char == '\2':
-                self.write4bits(0xC0) # 2nd line
-            elif char == '\3':
-                self.write4bits(0x94) # 3rd line
-            elif char == '\4':
-                self.write4bits(0xD4) # 4th line
+        for char in text:
+            if char == '\n':
+                self.write4bits(0xC0) # next line
             else:
                 self.write4bits(ord(char),True)
+
 
 if __name__ == '__main__':
 
     lcd = Adafruit_CharLCD()
 
     lcd.clear()
-    lcd.message("Adafruit 4 lines\2  Second line\3  Third line\4  Fourth :-)")
+    lcd.message("  Adafruit 16x2\n  Standard LCD")
+
